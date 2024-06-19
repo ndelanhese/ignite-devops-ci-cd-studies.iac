@@ -9,7 +9,8 @@
 *.log
 
 # Directories
-.terraform/
+**/.terraform/*
+.terraform.lock.*
 .vagrant/
 
 # SSH Keys
