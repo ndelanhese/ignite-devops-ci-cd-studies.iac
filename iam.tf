@@ -16,24 +16,22 @@ resource "aws_iam_openid_connect_provider" "oidc-git" {
 resource "aws_iam_role" "ecr_role" {
   name = "ecr_role"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
   assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
+    Version : "2012-10-17",
+    Statement : [
       {
-        "Effect" : "Allow",
-        "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Principal" : {
-          "Federated" : "arn:aws:iam::992382740209:oidc-provider/token.actions.githubusercontent.com"
+        Effect : "Allow",
+        Action : "sts:AssumeRoleWithWebIdentity",
+        Principal : {
+          Federated : "arn:aws:iam::992382740209:oidc-provider/token.actions.githubusercontent.com"
         },
-        "Condition" : {
-          "StringEquals" : {
+        Condition : {
+          StringEquals : {
             "token.actions.githubusercontent.com:aud" : [
               "sts.amazonaws.com"
             ],
             "token.actions.githubusercontent.com:sub" : [
-              "repo:ndelanhese/ignite-devops-ci-cd-studies:ref:refs/heads/main"
+              "repo:ndelanhese/ignite-devops-ci-cd-studies.api:ref:refs/heads/main"
             ]
           }
         }
@@ -80,6 +78,37 @@ resource "aws_iam_role" "ecr_role" {
       ]
     })
   }
+
+  tags = {
+    IAC = "True"
+  }
+}
+
+resource "aws_iam_role" "tf_role" {
+  name = "tf_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement : [
+      {
+        Effect : "Allow",
+        Action : "sts:AssumeRoleWithWebIdentity",
+        Principal : {
+          Federated : "arn:aws:iam::992382740209:oidc-provider/token.actions.githubusercontent.com"
+        },
+        Condition : {
+          StringEquals : {
+            "token.actions.githubusercontent.com:aud" : [
+              "sts.amazonaws.com"
+            ],
+            "token.actions.githubusercontent.com:sub" : [
+              "repo:ndelanhese/ignite-devops-ci-cd-studies.iac:ref:refs/heads/main"
+            ]
+          }
+        }
+      }
+    ]
+  })
 
   tags = {
     IAC = "True"
