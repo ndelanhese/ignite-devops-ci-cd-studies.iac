@@ -89,22 +89,18 @@ resource "aws_iam_role" "tf_role" {
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement : [
+    Statement = [
       {
-        Effect : "Allow",
-        Action : "sts:AssumeRoleWithWebIdentity",
-        Principal : {
-          Federated : "arn:aws:iam::992382740209:oidc-provider/token.actions.githubusercontent.com"
-        },
-        Condition : {
-          StringEquals : {
-            "token.actions.githubusercontent.com:aud" : [
-              "sts.amazonaws.com"
-            ],
-            "token.actions.githubusercontent.com:sub" : [
-              "repo:ndelanhese/ignite-devops-ci-cd-studies.iac:ref:refs/heads/main"
-            ]
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:sub" = "repo:ndelanhese/ignite-devops-ci-cd-studies.iac:ref:refs/heads/main"
           }
+        }
+        Effect = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::403429280851:oidc-provider/token.actions.githubusercontent.com"
         }
       }
     ]
