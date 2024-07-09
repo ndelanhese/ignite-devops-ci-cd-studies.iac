@@ -113,6 +113,7 @@ resource "aws_iam_role" "tf_role" {
   inline_policy {
     name = "tf_permissions"
     policy = jsonencode({
+      Version = "2012-10-17"
       Statement = [{
         Sid      = "Statement1"
         Action   = "ecr:*"
